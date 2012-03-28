@@ -1,0 +1,111 @@
+[FileVersion]
+Version=6.0
+[Compiler]
+A=8
+B=0
+C=1
+D=1
+E=0
+F=0
+G=1
+H=1
+I=1
+J=0
+K=0
+L=1
+M=0
+N=1
+O=1
+P=1
+Q=0
+R=0
+S=0
+T=0
+U=0
+V=1
+W=0
+X=1
+Y=1
+Z=1
+ShowHints=1
+ShowWarnings=1
+UnitAliases=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[Linker]
+MapFile=3
+OutputObjs=0
+ConsoleApp=1
+DebugInfo=0
+RemoteSymbols=0
+MinStackSize=16384
+MaxStackSize=1048576
+ImageBase=4194304
+ExeDescription=
+[Directories]
+OutputDir=
+UnitOutputDir=
+PackageDLLOutputDir=
+PackageDCPOutputDir=
+SearchPath=
+Packages=vcl;rtl;dbrtl;adortl;vcldb;vclx;bdertl;vcldbx;ibxpress;dsnap;cds;bdecds;qrpt;visualclx;VclSmp;vclshlctrls;inetdb;inet;nmfast;vclie;dbexpress;dbxcds;indy;dclOffice2k;DJcl;JvAppFrmD6R;JvCoreD6R;JvBandsD6R;JvBDED6R;JvDBD6R;JvDlgsD6R;JvCmpD6R;JvCryptD6R;JvCtrlsD6R;JvCustomD6R;JvDockingD6R;JvDotNetCtrlsD6R;JvEDID6R;JvGlobusD6R;JvHMID6R;JvInspectorD6R;JvInterpreterD6R;JvJansD6R;JvManagedThreadsD6R;JvMMD6R;JvNetD6R;JvStdCtrlsD6R;JvPageCompsD6R;JvPluginD6R;JvPrintPreviewD6R;JvSystemD6R;JvTimeFrameworkD6R;JvUIBD6R;JvValidatorsD6R;JvWizardD6R;JvXPCtrlsD6R;TeeUI;Tee;TeeDB;TeeLanguage;TeePro;TeeImage;rbTDBC66;rbRCL66;rbCIDE66;rbIDE66;rbBDE66;rbRIDE66;rbRAP66;rbDBDE66;rbDAD66;rbDIDE66;rbUSER66;fc4000v6;ip4000clientvcl6;xtradev;IBO40CRT_D6;IBO40TRT_D6;IBO40FRT_D6;IBO40VRT_D6;IBO40XRT_D6;IBO40WRT_D6;IBO40WXDT_D6;IBO40WXRT_D6;IBO40RPL_D6;IBO40FTS_D6;WinSkinD6R;GR32_D6;GR32_DSGN_D6;cxWebPascalScriptD6;dss;xmlrtl;inetdbbde;inetdbxpress;bsPolyglotD6
+Conditionals=EUREKALOG
+DebugSourceDirs=
+UsePackages=0
+[Parameters]
+RunParams=
+HostApplication=
+Launcher=
+UseLauncher=0
+DebugCWD=
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=C:\Archivos de programa\Borland\Delphi6\Bin\
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=2058
+CodePage=1252
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+[Excluded Packages]
+c:\archivos de programa\borland\delphi6\Projects\Bpl\PC.bpl=(untitled)
+c:\archivos de programa\borland\delphi6\Bin\dclclxdb60.bpl=Borland CLX Database Components
+C:\Archivos de programa\Borland\Delphi6\Bin\dclclxstd60.bpl=Borland CLX Standard Components
+c:\archivos de programa\borland\delphi6\Bin\dclmcn60.bpl=Borland DataSnap Connection Components
+c:\archivos de programa\borland\delphi6\Bin\applet60.bpl=Borland Control Panel Applet Package
+C:\WINDOWS\System32\rbADO66.bpl=ReportBuilder Data Access for ADO
+C:\WINDOWS\System32\rbDBE66.bpl=ReportBuilder Data Access for dbExpress
+C:\WINDOWS\System32\rbIBE66.bpl=ReportBuilder Data Access for Interbase Express
+c:\archivos de programa\borland\delphi6\Projects\Bpl\rvActionsD6.bpl=Actions for RichView
+c:\archivos de programa\borland\delphi6\Projects\Bpl\rppack_del.bpl=Report Manager components(non-visual)
+c:\archivos de programa\borland\delphi6\Projects\Bpl\rppackvcl_del.bpl=Report Manager VCL components
+c:\archivos de programa\borland\delphi6\Projects\Bpl\rppackdesignvcl_del.bpl=Report Manager Designer VCL Components
+c:\archivos de programa\borland\delphi6\Projects\Bpl\rppackv_del.bpl=Report manager Visual CLX components
+c:\archivos de programa\borland\delphi6\Projects\Bpl\rppackdesign_del.bpl=Report Manager Designer Component Package
+c:\archivos de programa\borland\delphi6\Projects\Bpl\rppackdesigntime_del.bpl=Report Manager Design Time Package
+C:\Archivos de programa\TeeChart Pro v502 for Delphi 6\Delphi6\Bin\DCLTGL56.bpl=TeeChart 5 for OpenGL
+c:\archivos de programa\borland\delphi6\Projects\Bpl\RVHTMLD6.bpl=(untitled)
+c:\archivos de programa\borland\delphi6\Projects\Bpl\A406_D60.bpl=TurboPower Async Professional 4.06 Designtime Package - VCL60
+C:\Archivos de programa\TechInsite\bin\dcltiPerAware60.bpl=(untitled)
+C:\ARCHIV~1\Borland\Delphi6\Projects\Bpl\xtradev.bpl=Extra ReportBuilder Devices
+c:\archivos de programa\borland\delphi6\Bin\dclwbm60.bpl=Borland InternetExpress Components
+c:\archivos de programa\borland\delphi6\Bin\dclwebsnap60.bpl=Borland WebSnap Components
+c:\archivos de programa\borland\delphi6\Bin\dclsoap60.bpl=Borland Soap Components
