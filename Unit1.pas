@@ -4,9 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, VectorGeometry,
-  Dialogs, GLScene, GLVectorFileObjects, GLObjects, GLWin32Viewer, GLMisc, glfilemd2,
-  GLCadencer, Keyboard, jpeg, GLTexture, GLHeightData, GLTerrainRenderer, GLSkydome,
-  GLFireFX, ExtCtrls, StdCtrls, GLLensFlare, GLWaterPlane, Math;
+  Dialogs, Keyboard, jpeg,  ExtCtrls, StdCtrls, Math, GLS.FireFX,
+  GLS.HeightData, GLS.Material, GLS.Cadencer, GLS.Objects, GLS.Scene,
+  GLS.VectorFileObjects, GLS.LensFlare, GLS.TerrainRenderer, GLS.SkyDome,
+  GLS.Coordinates, GLS.WaterPlane, GLS.BaseClasses, GLS.FileMD2, GLS.SceneViewer, GLS.Color, Formats.MD2;
 
 type
   TForm1 = class(TForm)
@@ -103,17 +104,17 @@ var
   rayStart, rayVector, iPoint, iNormal, PActor: TVector;
 begin
   GLSphere1.Material.FrontProperties.Emission.Color := clrRed;
-  //Vemos a donde deberia apuntar la mira telescópica...
+  //Vemos a donde deberia apuntar la mira telescÃ³pica...
   SetVector (rayStart, GLCamera1.AbsolutePosition);
   SetVector (rayVector, GLSceneViewer1.Buffer.ScreenToVector (
-    AffineVectorMake (220, GLSceneViewer1.Height - 150, 0)));
+    AffineVectorMake (200, {GLSceneViewer1.Height - 50} 400, 0)));
   NormalizeVector (rayVector);
   if GLTerrainRenderer1.RayCastIntersect (raystart, rayvector, @iPoint, @iNormal) then
   begin
     GLSphere1.Visible := True;
-    if iPoint[1] < GLWaterPlane1.AbsolutePosition[1] then
+    if iPoint.Y < GLWaterPlane1.AbsolutePosition.Y then
     begin
-      iPoint[1] := GLWaterPlane1.AbsolutePosition[1];
+      iPoint.Y := GLWaterPlane1.AbsolutePosition.Y;
       if (isKeyDown (VK_CONTROL)) then
       begin
         GLWaterPlane1.CreateRippleAtWorldPos (iPoint);
@@ -209,7 +210,7 @@ begin
         Y := GLTerrainRenderer1.InterpolatedHeight (AsVector);
       end;
       PActor    := GLDummyCube1.Position.AsVector;
-      PActor[1] := 0;
+      PActor.Y := 0;
       BeastCube.PointTo (PActor, YHmgVector);
       BeastCube.Move (cMoveSpeed * deltaTime);
       PonBestiaAnimacion (1);
@@ -249,4 +250,3 @@ end;
 
 
 end.
-
