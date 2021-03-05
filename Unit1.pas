@@ -33,17 +33,22 @@ type
     Beast: TGLActor;
     BeastCube: TGLDummyCube;
     procedure FormCreate(Sender: TObject);
-    procedure GLSceneViewer1MouseMove(Sender: TObject; Shift: TShiftState;
-      X, Y: integer);
-    procedure GLSceneViewer1MouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: integer);
     procedure GLCadencer1Progress(Sender: TObject;
       const deltaTime, newTime: double);
     procedure Timer1Timer(Sender: TObject);
   private
     { Private declarations }
-    mdx, mdy: integer;
     procedure PonBestiaAnimacion(X: integer);
+    procedure BestiaCaminaHaciaElJugador(const deltaTime: double);
+    procedure BestiaAlcanzoAlJugador;
+    procedure MueveAlJugador;
+    procedure JugadorDispara;
+    procedure JugadorEnEspera;
+    procedure ChecarSiMatamosAlaBestia(rayStart: TVector4f;
+      rayVector: TVector4f; iPoint: TVector4f; iNormal: TVector4f);
+    procedure MostrarPuntoDeMira(var rayStart: TVector4f;
+      var rayVector: TVector4f; var iPoint: TVector4f; iNormal: TVector4f);
+    procedure Apuntar;
   public
     { Public declarations }
     FCamHeight: single;
@@ -87,24 +92,149 @@ begin
   FCamHeight := 30;
 end;
 
-procedure TForm1.GLSceneViewer1MouseMove(Sender: TObject; Shift: TShiftState;
-  X, Y: integer);
-begin
-  mdx := X;
-  mdy := Y;
-end;
-
-procedure TForm1.GLSceneViewer1MouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: integer);
-begin
-  mdx := X;
-  mdy := Y;
-end;
-
 procedure TForm1.GLCadencer1Progress(Sender: TObject;
   const deltaTime, newTime: double);
+begin
+  Apuntar;
+
+  // Disparamos con la tecla Control...
+  if isKeyDown(VK_CONTROL) then
+    JugadorDispara
+  else
+    JugadorEnEspera;
+
+  MueveAlJugador;
+
+  if isKeyDown(VK_ESCAPE) then
+  begin
+    Close;
+  end;
+
+  if (BeastCube.DistanceTo(GLDummyCube1) > 50) then
+    BestiaCaminaHaciaElJugador(deltaTime)
+  else
+    BestiaAlcanzoAlJugador;
+
+  GLWaterPlane1.AbsolutePosition := GLDummyCube1.AbsolutePosition;
+  GLWaterPlane1.Position.Y := -15;
+  GLSceneViewer1.Invalidate;
+end;
+
+procedure TForm1.PonBestiaAnimacion(X: integer);
+begin
+  if Beast.CurrentAnimation <> Beast.Animations.Items[X].Name then
+  begin
+    Beast.SwitchToAnimation(X);
+  end;
+end;
+
+procedure TForm1.BestiaCaminaHaciaElJugador(const deltaTime: double);
 var
-  rayStart, rayVector, iPoint, iNormal, PActor: TVector;
+  PActor: TVector4f;
+begin
+  begin
+    if (not(Beast.CurrentAnimation = Beast.Animations.Items[animationdead].Name))
+    then
+    begin
+      with BeastCube.Position do
+      begin
+        Y := GLTerrainRenderer1.InterpolatedHeight(AsVector);
+      end;
+      PActor := GLDummyCube1.Position.AsVector;
+      PActor.Y := 0;
+      BeastCube.PointTo(PActor, YHmgVector);
+      BeastCube.Move(cMoveSpeed * deltaTime);
+      PonBestiaAnimacion(1);
+    end;
+  end;
+end;
+
+procedure TForm1.BestiaAlcanzoAlJugador;
+begin
+  begin
+    Beast.AnimationMode := aamLoop;
+    PonBestiaAnimacion(3);
+  end;
+end;
+
+procedure TForm1.MueveAlJugador;
+begin
+  with GLCamera1.Position do
+  begin
+    if isKeyDown(VK_UP) then
+    begin
+      GLDummyCube1.Move(-0.25);
+    end;
+    if isKeyDown(VK_DOWN) then
+    begin
+      GLDummyCube1.Move(0.25);
+    end;
+    if isKeyDown(VK_LEFT) then
+    begin
+      GLDummyCube1.Turn(-0.25);
+    end;
+    if isKeyDown(VK_RIGHT) then
+    begin
+      GLDummyCube1.Turn(0.25);
+    end;
+  end;
+
+  with GLDummyCube1.Position do
+  begin
+    Y := GLTerrainRenderer1.InterpolatedHeight(AsVector) + FCamHeight;
+  end;
+end;
+
+procedure TForm1.JugadorDispara;
+begin
+  begin
+    GLFireFXManager1.Disabled := False;
+    if (GLActor1.CurrentAnimation <> GLActor1.Animations.Items[1].Name) then
+    begin
+      GLLensFlare1.Visible := True;
+      GLActor1.SwitchToAnimation(1);
+    end
+    else
+    { with GetOrCreateSoundEmitter(GLCamera1) do begin
+      Source.SoundLibrary := GLSoundLibrary1;
+      Source.SoundName := GLSoundLibrary1.Samples[0].Name;
+      Source.Volume := 1;
+      end; }
+    begin
+      GLLensFlare1.Visible := not GLLensFlare1.Visible;
+    end;
+  end;
+end;
+
+procedure TForm1.JugadorEnEspera;
+begin
+  if GLActor1.CurrentAnimation <> GLActor1.Animations.Items[0].Name then
+  begin
+    GLActor1.SwitchToAnimation(0);
+    GLLensFlare1.Visible := False;
+    // with GetOrCreateSoundEmitter(GLCamera1) do playing := False;
+    GLFireFXManager1.Disabled := True;
+  end;
+end;
+
+procedure TForm1.ChecarSiMatamosAlaBestia(rayStart: TVector4f;
+  rayVector: TVector4f; iPoint: TVector4f; iNormal: TVector4f);
+begin
+  if Beast.RayCastIntersect(rayStart, rayVector, @iPoint, @iNormal) then
+  begin
+    GLSphere1.Visible := True;
+    GLSphere1.Position.AsVector := iPoint;
+    GLSphere1.Material.FrontProperties.Emission.Color := clrGreenYellow;
+    if (isKeyDown(VK_CONTROL)) then
+    begin
+      PonBestiaAnimacion(animationdead);
+      Beast.AnimationMode := aamPlayOnce;
+    end;
+  end;
+end;
+
+procedure TForm1.MostrarPuntoDeMira(var rayStart: TVector4f;
+  var rayVector: TVector4f; var iPoint: TVector4f; iNormal: TVector4f);
 begin
   GLSphere1.Material.FrontProperties.Emission.Color := clrRed;
   // Vemos a donde deberia apuntar la mira telescópica...
@@ -112,8 +242,7 @@ begin
   SetVector(rayVector, GLSceneViewer1.Buffer.ScreenToVector
     (AffineVectorMake(200, { GLSceneViewer1.Height - 50 } 400, 0)));
   NormalizeVector(rayVector);
-  if GLTerrainRenderer1.RayCastIntersect(rayStart,
-  rayVector, @iPoint, @iNormal)
+  if GLTerrainRenderer1.RayCastIntersect(rayStart, rayVector, @iPoint, @iNormal)
   then
   begin
     GLSphere1.Visible := True;
@@ -132,111 +261,17 @@ begin
   begin
     GLSphere1.Visible := False;
   end;
-
-  if Beast.RayCastIntersect(rayStart, rayVector, @iPoint, @iNormal) then
-  begin
-    GLSphere1.Visible := True;
-    GLSphere1.Position.AsVector := iPoint;
-    GLSphere1.Material.FrontProperties.Emission.Color := clrGreenYellow;
-    if (isKeyDown(VK_CONTROL)) then
-    begin
-      PonBestiaAnimacion(animationdead);
-      Beast.AnimationMode := aamPlayOnce;
-    end;
-  end;
-
-  // Disparamos con la tecla Control...
-  if (isKeyDown(VK_CONTROL)) then
-  begin
-    GLFireFXManager1.Disabled := False;
-    if (GLActor1.CurrentAnimation <> GLActor1.Animations.Items[1].Name) then
-    begin
-      GLLensFlare1.Visible := True;
-      GLActor1.SwitchToAnimation(1);
-      { with GetOrCreateSoundEmitter(GLCamera1) do begin
-        Source.SoundLibrary := GLSoundLibrary1;
-        Source.SoundName := GLSoundLibrary1.Samples[0].Name;
-        Source.Volume := 1;
-        end; }
-    end
-    else
-    begin
-      GLLensFlare1.Visible := not GLLensFlare1.Visible;
-    end;
-    { with GetOrCreateSoundEmitter(GLCamera1) do
-      if not Playing then Playing := True; }
-  end
-  else if GLActor1.CurrentAnimation <> GLActor1.Animations.Items[0].Name then
-  begin
-    GLActor1.SwitchToAnimation(0);
-    GLLensFlare1.Visible := False;
-    // with GetOrCreateSoundEmitter(GLCamera1) do playing := False;
-    GLFireFXManager1.Disabled := True;
-  end;
-
-  with GLCamera1.Position do
-  begin
-    if isKeyDown(VK_UP) then
-    begin
-      GLDummyCube1.Move(-2);
-    end;
-    if isKeyDown(VK_DOWN) then
-    begin
-      GLDummyCube1.Move(2);
-    end;
-    if isKeyDown(VK_LEFT) then
-    begin
-      GLDummyCube1.Turn(-1);
-    end;
-    if isKeyDown(VK_RIGHT) then
-    begin
-      GLDummyCube1.Turn(1);
-    end;
-  end;
-
-  if isKeyDown(VK_ESCAPE) then
-  begin
-    Close;
-  end;
-
-  with GLDummyCube1.Position do
-  begin
-    Y := GLTerrainRenderer1.InterpolatedHeight(AsVector) + FCamHeight;
-  end;
-
-  if (BeastCube.DistanceTo(GLDummyCube1) > 40) then
-  begin
-    if (not(Beast.CurrentAnimation = Beast.Animations.Items[animationdead].Name))
-    then
-    begin
-      with BeastCube.Position do
-      begin
-        Y := GLTerrainRenderer1.InterpolatedHeight(AsVector);
-      end;
-      PActor := GLDummyCube1.Position.AsVector;
-      PActor.Y := 0;
-      BeastCube.PointTo(PActor, YHmgVector);
-      BeastCube.Move(cMoveSpeed * deltaTime);
-      PonBestiaAnimacion(1);
-    end;
-  end
-  else
-  begin
-    Beast.AnimationMode := aamLoop;
-    PonBestiaAnimacion(0);
-  end;
-
-  GLWaterPlane1.AbsolutePosition := GLDummyCube1.AbsolutePosition;
-  GLWaterPlane1.Position.Y := -15;
-  GLSceneViewer1.Invalidate;
 end;
 
-procedure TForm1.PonBestiaAnimacion(X: integer);
+procedure TForm1.Apuntar;
+var
+  rayStart: TVector4f;
+  rayVector: TVector4f;
+  iPoint: TVector4f;
+  iNormal: TVector4f;
 begin
-  if Beast.CurrentAnimation <> Beast.Animations.Items[X].Name then
-  begin
-    Beast.SwitchToAnimation(X);
-  end;
+  MostrarPuntoDeMira(rayStart, rayVector, iPoint, iNormal);
+  ChecarSiMatamosAlaBestia(rayStart, rayVector, iPoint, iNormal);
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);

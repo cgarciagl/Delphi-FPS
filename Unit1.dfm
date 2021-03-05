@@ -33,8 +33,6 @@ object Form1: TForm1
     FieldOfView = 155.103134155273400000
     PenAsTouch = False
     Align = alClient
-    OnMouseDown = GLSceneViewer1MouseDown
-    OnMouseMove = GLSceneViewer1MouseMove
     TabOrder = 0
   end
   object GLScene1: TGLScene
