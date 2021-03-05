@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 107
   BorderStyle = bsSingle
   Caption = 'Form1'
-  ClientHeight = 455
+  ClientHeight = 453
   ClientWidth = 634
   Color = clBtnFace
   Constraints.MaxHeight = 482
@@ -23,17 +23,19 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 634
-    Height = 455
+    Height = 453
     Camera = GLCamera1
     Buffer.FogEnvironment.FogColor.Color = {C6BF3F3FDCD8583FDCD8583F0000803F}
     Buffer.FogEnvironment.FogStart = 10.000000000000000000
     Buffer.FogEnvironment.FogEnd = 1000.000000000000000000
     Buffer.FogEnvironment.FogDistance = fdEyePlane
     Buffer.ShadeModel = smSmooth
-    FieldOfView = 155.209182739257800000
+    FieldOfView = 155.103134155273400000
+    PenAsTouch = False
     Align = alClient
     OnMouseDown = GLSceneViewer1MouseDown
     OnMouseMove = GLSceneViewer1MouseMove
+    TabOrder = 0
   end
   object GLScene1: TGLScene
     Left = 590
@@ -78,6 +80,7 @@ object Form1: TForm1
       HeightDataSource = GLBitmapHDS1
       TilesPerTexture = 1.000000000000000000
       QualityDistance = 150.000000000000000000
+      ContourWidth = 0
     end
     object GLFreeForm1: TGLFreeForm
       Scale.Coordinates = {00004842000048420000484200000000}
@@ -86,7 +89,6 @@ object Form1: TForm1
     object GLDummyCube1: TGLDummyCube
       Position.Coordinates = {0000803F0000803F0000803F0000803F}
       TurnAngle = 180.000000000000000000
-      Up.Coordinates = {000000000000803F0000008000000000}
       CubeSize = 1.000000000000000000
       object GLLensFlare1: TGLLensFlare
         Size = 75
@@ -127,8 +129,8 @@ object Form1: TForm1
       Visible = False
       Radius = 0.500000000000000000
       EffectsData = {
-        0201060A54474C4246697265465802000610474C4669726546584D616E616765
-        7231}
+        0458434F4C02010201060A54474C424669726546580201020006064669726546
+        58020002000610474C4669726546584D616E6167657231}
     end
     object BeastCube: TGLDummyCube
       Position.Coordinates = {000000000000803F000048C20000803F}
@@ -174,7 +176,7 @@ object Form1: TForm1
   object Timer1: TTimer
     Interval = 300
     OnTimer = Timer1Timer
-    Left = 462
-    Top = 48
+    Left = 574
+    Top = 72
   end
 end
